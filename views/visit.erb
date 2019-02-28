@@ -23,11 +23,13 @@
   <div class="form-group">
     <label for="exampleFormControlSelect1">Выберите парикмахера!</label>
     <select name="professional" type="text" class="form-control" id="exampleFormControlSelect1">
-      <option>Марина</option>
-      <option>Карина</option>
-      <option>Юра</option>
-      <option>Тема</option>
-      <option>Миша</option>
+      <option <%= @professional == 'Марина' ? ' selected' : '' %>>Марина</option>
+      <option <%= @professional == 'Карина' ? ' selected' : '' %>>Карина</option>
+      <option <%= @professional == 'Тема' ? ' selected' : '' %>>Тема</option>
+      <option <%= @professional == 'Юра' ? ' selected' : '' %>>Юра</option>
+      <option <%= @professional == 'Миша' ? ' selected' : '' %>>Миша</option>
+      
+
     </select>
   </div>
  
