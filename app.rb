@@ -4,6 +4,19 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
+configure do
+	db = SQLite3::Database.new 'test.sqlite3'
+	db.execute 'CREATE TABLE IF NOT EXISTS
+	"visit"
+	  (
+		`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
+		`name`	TEXT,
+		`phone`	TEXT,
+		`date`	TEXT,
+		`barber`TEXT,
+		`color`	TEXT
+	  )'
+end	
 
 get '/' do
 	erb "Hello! <a href=\"https://github.com/karamalesa1980\">My GitHub</a> pattern has been modified for <a href=\"https://www.youtube.com/channel/UCiqUSuswB1_uU2BONwvCTYg?view_as=subscriber\">Karamalesa TV</a>"			
@@ -57,23 +70,32 @@ post '/visit' do
 				# т.е переменной error присвоить сообщение об ошибке
 			@error = hh[key]
 
+		    #@title = 'Спасибо за запись'
+		    #@message = "#{@user_name}, мы будем вас ждать!  #{@date_time} "
+		
 				# вернуть представление visit
-			erb :visit
-			
-				
-
 		end
-				
+
 	end
+	
+	
 		
 	
-	@title = 'Спасибо!'
-	@message = "#{@user_name} мы будем вас ждать!  #{@date_time} "
+    db = SQLite3::Database.new 'test.sqlite3'
+	db.execute "insert into visit(name, phone, date, barber, color) values('#{@user_name}', '#{@user_phone}', '#{@date_time}', '#{@professional}', '#{@color}')"
 
-	f = File.open './public/users.txt', 'a'
-	f.write "User: #{@user_name}, Phone: #{@user_phone}, Date and time: #{@date_time}, Professional: #{@professional}, Color: #{@color}\n"
-	f.close
-	erb :visit	
+	db.close
+	
+	erb :visit
+	
+
+	
+		
+		
+	
+
+
+
 	
 end
 post '/contacts' do 
