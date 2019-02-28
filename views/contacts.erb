@@ -1,0 +1,23 @@
+<h1>Обратная связь!</h1>
+<h3>
+<%=@title%><br><br>
+</h3>
+
+<form action="/contacts" method="POST">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Ваш email</label>
+    <input name="user_email" type="email" class="form-control" placeholder="Ваш email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your Email with anyone else.</small>
+  </div>
+
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Ваше сообщение!</label>
+    <textarea name="user_body" type="text" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  
+    <small id="emailHelp" class="form-text text-muted">We'll never share your Message with anyone else.</small>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Отправить</button>
+</form>
+
+
