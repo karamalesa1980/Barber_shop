@@ -58,35 +58,20 @@ post '/visit' do
 		    
 	}
 
+	@error = hh.select {|key,_| params[key] == ""}.values.join(",  ")
 	
-	# для каждой пары ключ-значение
-	hh.each do |key, value|
-
-		# если параметр пуст
-		if params[key] == ''
-
-				# переменной error присвоить value из хеша hh
-				# (а value из хеша hh это сообщение об ошибке)
-				# т.е переменной error присвоить сообщение об ошибке
-			@error = hh[key]
-
-		    #@title = 'Спасибо за запись'
-		    #@message = "#{@user_name}, мы будем вас ждать!  #{@date_time} "
 		
-				# вернуть представление visit
-		end
+	
+    @db = SQLite3::Database.new 'test.sqlite3'
+	@db.execute "insert into visit(name, phone, date, barber, color) values('#{@user_name}', '#{@user_phone}', '#{@date_time}', '#{@professional}', '#{@color}')"
 
+	@db.close
+	
+	if @error != ""
+		return erb :visit
 	end
-	
-	
-		
-	
-    db = SQLite3::Database.new 'test.sqlite3'
-	db.execute "insert into visit(name, phone, date, barber, color) values('#{@user_name}', '#{@user_phone}', '#{@date_time}', '#{@professional}', '#{@color}')"
 
-	db.close
-	
-	erb :visit
+	erb "<h4>Спосибо #{@user_name} вы подписались, будем ждать вас #{@date_time}</h4>"
 	
 
 	
