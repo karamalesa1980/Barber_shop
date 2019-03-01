@@ -5,8 +5,8 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 configure do
-	db = SQLite3::Database.new 'test.sqlite3'
-	db.execute 'CREATE TABLE IF NOT EXISTS
+	@db = SQLite3::Database.new 'test.sqlite3'
+	@db.execute 'CREATE TABLE IF NOT EXISTS
 	"visit"
 	  (
 		`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
