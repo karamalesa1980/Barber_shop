@@ -5,8 +5,8 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 configure do
-	@db = SQLite3::Database.new 'test.sqlite3'
-	@db.execute 'CREATE TABLE IF NOT EXISTS
+	db = SQLite3::Database.new 'test.sqlite3'
+	db.execute 'CREATE TABLE IF NOT EXISTS
 	"visit"
 	  (
 		`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -62,33 +62,28 @@ post '/visit' do
 	
 		
 	
-    @db = SQLite3::Database.new 'test.sqlite3'
-	@db.execute "insert into visit(name, phone, date, barber, color) values('#{@user_name}', '#{@user_phone}', '#{@date_time}', '#{@professional}', '#{@color}')"
+    db = get_db
+	db.execute "insert into visit(name, phone, date, barber, color) values('#{@user_name}', '#{@user_phone}', '#{@date_time}', '#{@professional}', '#{@color}')"
 
-	@db.close
+	
 	
 	if @error != ""
 		return erb :visit
 	end
 
 	erb "<h4>Спосибо #{@user_name} вы подписались, будем ждать вас #{@date_time}</h4>"
-	
-
-	
 		
-		
-	
-
-
-
-	
 end
+
+
+
+
 post '/contacts' do 
 
 	@user_email = params[:user_email]
 	@user_body = params[:user_body]
 
-	db = SQLite3::Database.new 'test.sqlite3'
+	db = get_db
 
 	db.execute "insert into users(email, body) values('#{@user_email}', '#{@user_body}')"
 
@@ -99,4 +94,8 @@ post '/contacts' do
 	erb :contacts
 
 
+end
+
+def get_db
+  return SQLite3::Database.new 'test.sqlite3'
 end
