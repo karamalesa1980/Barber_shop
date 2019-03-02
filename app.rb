@@ -62,9 +62,7 @@ post '/visit' do
 	
 		
 	
-    db = get_db
-	db.execute "insert into visit(name, phone, date, barber, color) values('#{@user_name}', '#{@user_phone}', '#{@date_time}', '#{@professional}', '#{@color}')"
-
+    save_form_data_to_database
 	
 	
 	if @error != ""
@@ -98,4 +96,11 @@ end
 
 def get_db
   return SQLite3::Database.new 'test.sqlite3'
+end
+
+def save_form_data_to_database
+  db = get_db
+  db.execute 'INSERT INTO visit (name, phone, date, barber, color)
+  VALUES (?, ?, ?, ?, ?)', [@user_name, @user_phone, @date_time, @professional, @color]
+  db.close
 end
