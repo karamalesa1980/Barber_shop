@@ -15,6 +15,14 @@ configure do
 		`date`	TEXT,
 		`barber`TEXT,
 		`color`	TEXT
+	  )';
+	  db.execute 'CREATE TABLE IF NOT EXISTS
+	"users"
+	  (
+		`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
+		`email`	TEXT,
+		`body`	TEXT
+		
 	  )'
 end	
 
@@ -69,7 +77,7 @@ post '/visit' do
 		return erb :visit
 	end
 
-	erb "<h4>Спосибо #{@user_name} вы подписались, будем ждать вас #{@date_time}</h4>"
+	erb "<h4>Спасибо #{@user_name} вы записались, будем ждать вас #{@date_time}</h4>"
 		
 end
 
@@ -89,7 +97,7 @@ post '/contacts' do
 
 
 
-	erb :contacts
+	erb "<h4>Спасибо ваше сообщение отправлено!</h4>"
 
 
 end
