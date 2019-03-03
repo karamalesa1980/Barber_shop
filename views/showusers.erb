@@ -1,0 +1,25 @@
+<table class="table table-bordered">
+  <thead>
+  <tr>
+  	<th class="bg-primary">#</th>
+    <th class="bg-primary"> Имя посетителя  </th>
+    <th class="bg-primary"> Телефон посетителя  </th>
+    <th class="bg-primary"> Дата визита  </th>
+    <th class="bg-primary"> Парикмахер  </th>
+    <th class="bg-primary"> Цвет краски  </th>
+  </tr>
+
+<% @results.each do |row| %>
+
+  <tr <%= "style='background-color: red; color: white;'" if row == @results.first %>>
+  	<td><%= row['id'] %></td>
+    <td><%= row['name'] %></td>
+    <td><%= row['phone'] %></td>
+    <td><%= row['date'] %></td>
+    <td><%= row['barber'] %></td>
+    <td><%= row['color'] %></td>
+  </tr>
+
+<% end %>
+
+</table>

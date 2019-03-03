@@ -22,15 +22,14 @@
 
   <div class="form-group">
     <label for="exampleFormControlSelect1">Выберите парикмахера!</label>
-    <select name="professional" type="text" class="form-control" id="exampleFormControlSelect1">
-      <option value="Марина" <%= @professional == 'Марина' ? ' selected' : '' %>>Марина</option>
-      <option value="Карина" <%= @professional == 'Карина' ? ' selected' : '' %>>Карина</option>
-      <option value="Тема" <%= @professional == 'Тема' ? ' selected' : '' %>>Тема</option>
-      <option value="Юра" <%= @professional == 'Юра' ? ' selected' : '' %>>Юра</option>
-      <option value="Миша" <%= @professional == 'Миша' ? ' selected' : '' %>>Миша</option>
-      
-
-    </select>
+    <p>
+  <select name="option">
+    <option value="" selected>Выбрать опцию...</option>
+    <% @options.each do |item| %>
+    <option <%= @barber == item['name'] ? 'selected' : '' %>><%= item['name'] %></option>
+    <% end %>
+  </select>
+</p>
   </div>
  
  

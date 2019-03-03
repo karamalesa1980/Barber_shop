@@ -4,9 +4,15 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
+def get_db
+   @db =  SQLite3::Database.new 'test.sqlite3'
+   @db.results_as_hash = true
+  return @db
+end
+
 configure do
-	db = SQLite3::Database.new 'test.sqlite3'
-	db.execute 'CREATE TABLE IF NOT EXISTS
+	@db = get_db
+	@db.execute 'CREATE TABLE IF NOT EXISTS
 	"visit"
 	  (
 		`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,17 +22,31 @@ configure do
 		`barber`TEXT,
 		`color`	TEXT
 	  )';
-	  db.execute 'CREATE TABLE IF NOT EXISTS
+	  @db.execute 'CREATE TABLE IF NOT EXISTS
 	"users"
 	  (
 		`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
 		`email`	TEXT,
 		`body`	TEXT
 		
-	  )'
+	  )';
+	  @db.execute 'CREATE TABLE IF NOT EXISTS "options"
+    (
+      "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+      "option" TEXT
+    )'
+
+      
 end	
 
+
+
 get '/' do
+
+	 get_db
+     @options = @db.execute 'SELECT * FROM Options'
+     @db.close
+
 	erb "Hello! <a href=\"https://github.com/karamalesa1980\">My GitHub</a> pattern has been modified for <a href=\"https://www.youtube.com/channel/UCiqUSuswB1_uU2BONwvCTYg?view_as=subscriber\">Karamalesa TV</a>"			
 end
 
@@ -46,7 +66,16 @@ end
 
 get '/visit' do
 
+	 
 	erb :visit
+end	
+
+get '/showusers' do
+	@db = get_db
+
+    @results = @db.execute 'SELECT * FROM visit ORDER BY id DESC'
+    @db.close
+	erb :showusers
 end	
 
 post '/visit' do
@@ -89,11 +118,11 @@ post '/contacts' do
 	@user_email = params[:user_email]
 	@user_body = params[:user_body]
 
-	db = get_db
+	@db = get_db
 
-	db.execute "insert into users(email, body) values('#{@user_email}', '#{@user_body}')"
+	@db.execute "insert into users(email, body) values('#{@user_email}', '#{@user_body}')"
 
-	db.close
+	@db.close
 
 
 
@@ -102,13 +131,11 @@ post '/contacts' do
 
 end
 
-def get_db
-  return SQLite3::Database.new 'test.sqlite3'
-end
+
 
 def save_form_data_to_database
-  db = get_db
-  db.execute 'INSERT INTO visit (name, phone, date, barber, color)
+  @db = get_db
+  @db.execute 'INSERT INTO visit (name, phone, date, barber, color)
   VALUES (?, ?, ?, ?, ?)', [@user_name, @user_phone, @date_time, @professional, @color]
-  db.close
+  @db.close
 end
