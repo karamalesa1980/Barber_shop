@@ -4,6 +4,11 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
+before do
+  db = get_db
+  @barbers = @barbers = @db.execute 'SELECT * FROM barber'
+end
+
 def is_barber_exists? db, name
 	@db.execute('SELECT * FROM barber WHERE name=?', [name]).length > 0
 end	
@@ -48,7 +53,7 @@ configure do
 	      "name" TEXT
     )';
 
-     seed_db @db, ['Foo', 'Faa', 'Moo', 'Zoo', 'Faz', 'Maz', 'Kraz']
+     seed_db @db, ['Марина', 'Карина', 'Артем', 'Юра', 'Миша', 'Ира', 'Света']
 
   	 @db.close  
 end	
@@ -57,9 +62,7 @@ end
 
 get '/' do
 
-	 get_db
-     @options = @db.execute 'SELECT * FROM barber'
-     @db.close
+	 
 
 	erb "Hello! <a href=\"https://github.com/karamalesa1980\">My GitHub</a> pattern has been modified for <a href=\"https://www.youtube.com/channel/UCiqUSuswB1_uU2BONwvCTYg?view_as=subscriber\">Karamalesa TV</a>"			
 end
@@ -81,6 +84,7 @@ get '/something' do
 end	
 
 get '/visit' do
+	
 
 	 
 	erb :visit
@@ -107,7 +111,8 @@ post '/visit' do
 
 	hh = { :user_name => "Введите Ваше имя",
 		   :user_phone => "Введите Ваш телефон",
-		   :date_time => "Введите дату и время"
+		   :date_time => "Введите дату и время",
+		   :professional => "Выберите парикмахера"
 		    
 	}
 
@@ -115,13 +120,13 @@ post '/visit' do
 	
 		
 	
-    save_form_data_to_database
+    
 	
 	
 	if @error != ""
 		return erb :visit
 	end
-
+	save_form_data_to_database
 	erb "<h4>Спасибо #{@user_name} вы записались, будем ждать вас #{@date_time}</h4>"
 		
 end

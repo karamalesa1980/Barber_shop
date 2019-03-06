@@ -23,9 +23,12 @@
   <div class="form-group">
     <label for="exampleFormControlSelect1">Выберите парикмахера!</label>
     <p>
-  <select name="option">
+  <select name="professional" class="form-control">
     <option value="" selected>Выбрать опцию...</option>
-    
+    <% @barbers.each do |item| %>
+      <option <%= @professional == item['name'] ? 'selected' : '' %>><%= item['name'] %></option>
+    <% end %>
+
   </select>
 </p>
   </div>
