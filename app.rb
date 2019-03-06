@@ -4,6 +4,18 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
+def is_barber_exists? db, name
+	@db.execute('SELECT * FROM barber WHERE name=?', [name]).length > 0
+end	
+
+def seed_db db, barbers
+  barbers.each do |barber|
+    if !is_barber_exists? @db, barber
+      @db.execute 'INSERT INTO barber (name) VALUES (?)', [barber]
+    end
+  end
+end
+
 def get_db
    @db =  SQLite3::Database.new 'test.sqlite3'
    @db.results_as_hash = true
@@ -15,28 +27,30 @@ configure do
 	@db.execute 'CREATE TABLE IF NOT EXISTS
 	"visit"
 	  (
-		`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
-		`name`	TEXT,
-		`phone`	TEXT,
-		`date`	TEXT,
-		`barber`TEXT,
-		`color`	TEXT
+		"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+		"name"	TEXT,
+		"phone"	TEXT,
+		"date"	TEXT,
+		"barber"TEXT,
+		"color"	TEXT
 	  )';
 	  @db.execute 'CREATE TABLE IF NOT EXISTS
 	"users"
 	  (
-		`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
-		`email`	TEXT,
-		`body`	TEXT
+		"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+		"email"	TEXT,
+		"body"	TEXT
 		
 	  )';
-	  @db.execute 'CREATE TABLE IF NOT EXISTS "options"
-    (
-      "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-      "option" TEXT
-    )'
+	  @db.execute 'CREATE TABLE IF NOT EXISTS "barber"
+	    (
+	      "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+	      "name" TEXT
+    )';
 
-      
+     seed_db @db, ['Foo', 'Faa', 'Moo', 'Zoo', 'Faz', 'Maz', 'Kraz']
+
+  	 @db.close  
 end	
 
 
@@ -44,13 +58,15 @@ end
 get '/' do
 
 	 get_db
-     @options = @db.execute 'SELECT * FROM Options'
+     @options = @db.execute 'SELECT * FROM barber'
      @db.close
 
 	erb "Hello! <a href=\"https://github.com/karamalesa1980\">My GitHub</a> pattern has been modified for <a href=\"https://www.youtube.com/channel/UCiqUSuswB1_uU2BONwvCTYg?view_as=subscriber\">Karamalesa TV</a>"			
 end
 
 get '/contacts' do
+	
+
 	erb :contacts
 end	
 

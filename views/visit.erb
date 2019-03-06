@@ -25,9 +25,7 @@
     <p>
   <select name="option">
     <option value="" selected>Выбрать опцию...</option>
-    <% @options.each do |item| %>
-    <option <%= @barber == item['name'] ? 'selected' : '' %>><%= item['name'] %></option>
-    <% end %>
+    
   </select>
 </p>
   </div>
